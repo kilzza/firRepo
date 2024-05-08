@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+
+   <th:block th:fragment="content">
+   
+      <h1 class="mt-4">방명록 상세 페이지</h1>
+      
+      <div class="form-group">
+         <label>gno</label>
+         <input type="text" class="form-control" name="gno" th:value="${dto.gno}" readonly>
+      </div>
+         
+      <div class="form-group">
+         <label>Title</label>
+         <input type="text" class="form-control" name="title" th:value="${dto.title}" readonly>
+      </div>
+   
+      <div class="form-group">
+         <label>Content</label>
+         <textarea class="form-control" name="content" rows="5" readonly="readonly">[[${dto.content}]]</textarea>
+      </div>
+   
+      <div class="form-group">
+         <label>Writer</label>
+         <input type="text" class="form-control" name="writer" th:value="${dto.writer}" readonly>
+      </div>
+
+      <div class="form-group">
+         <label>작성일</label>
+         <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd')}" readonly>
+      </div>
+   
+      <div class="form-group">
+         <label>수정일</label>
+         <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd')}" readonly>
+      </div>
+   
+   
+   	<!-- 하위에는 수정(Modify)과 list로 들어가는 버튼에 대한 link를 한다. -->
+   	<!-- 
+   		1.수정으로 가때는 글 번호와 같이 가야한다.
+   		2.수정페이지는 폼 그대로 사용
+   		2-1.어디를 수정할건지,
+   		2-2.수정 시 key 값만 gno를 어떻게 넘기고 받을지,
+   		2-3.수정 후, 내용을 보기 위해 list로 redirect 할건데, 페이지 넘버는 어떻게 이동시킬건지,
+   		
+   	 -->
+    <a th:href="@{/guestbook/modify(gno=${dto.gno})}">
+    	<button type="button" class="btn btn-primary">Modify</button>
+    </a>
+    
+    <!-- list로 back 버튼 -->
+    
+    <a th:href="@{/guestbook/list(page=${pageRequestDTO.page})}">
+    	<button type="button" class="btn btn-primary">List</button>
+    </a>
+    
+    
+   </th:block>
+
+</th:block>

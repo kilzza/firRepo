@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+
+   <th:block th:fragment="content">
+   
+      <h1 class="mt-4">수정 페이지</h1>
+   
+   
+   <!-- 글 수정하게 되면 form 태그 사이에 있는 데이터들이 controller 에 모두 전송된다 -->
+         
+      <form method="post" action="/guestbook/modify">
+      
+      <!-- 유저는 요청하지 않았지만 코더에게 필요한 것을 hidden 태그로 가져온다 -->
+      <input type="hidden" name="page" th:value="${pageRequestDTO.page}" class="form-group">
+      <input type="hidden" name="regDate" th:value="${dto.regDate}" class="form-group">
+      <input type="hidden" name="modDate" th:value="${dto.modDate}" class="form-group">
+     
+      <div class="form-group">
+         <label>gno</label>
+         <input type="text" class="form-control" name="gno" th:value="${dto.gno}" readonly>
+      </div>
+
+      <div class="form-group">
+         <label>title</label>
+         <input type="text" class="form-control" name="title" th:value="${dto.title}">
+         
+      </div>
+
+      <div class="form-group">
+         <label>content</label>
+         <textarea class="form-control" name="content" rows="5">[[${dto.content}]]</textarea>
+      </div>
+
+      <div class="form-group">
+         <label>writer</label>
+         <input type="text" class="form-control" name="writer" th:value="${dto.writer}" readonly>
+      </div>
+
+      <div class="form-group">
+         <label>작성일</label>
+         <input type="text" class="form-control" 
+               th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}" readonly>
+      </div>
+      
+      <div class="form-group">
+         <label>수정일</label>
+         <input type="text" class="form-control" 
+               th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd')}" readonly>
+      </div>
+      
+      </form>
+      
+      
+      <button class="btn btn-primary modifyBtn">세이브</button>
+      <button class="btn btn-info listBtn">고 백투 리스트</button>
+      <button class="btn btn-danger removeBtn">삭제</button>
+      
+      
+      <script th:inline="javascript">
+      
+      /* jQuery 를 이용해서 동적으로 폼 전송. 전체폼을 하나의 객체로 객체화 */
+      let theForm = $("form");
+      
+      
+      /* 유저가 어떤 버튼을 클릭한건지 찾아서 이벤트를 등록 */
+      
+      //1. modify
+      $(".modifyBtn").click(function(){
+         
+         // let dec = confirm("수정 고?");
+         // console.log(dec);
+         
+         if(! confirm("수정 고?")){  //no --> false 리턴. 따라서 폼 전송하지 않음
+            return;
+         }
+         
+         
+         /*
+            jQuery 의 form 객체의 메서드 중에 attr() 이 있는데
+            여기에는 폼의 속성(action, method 기타 정보 등을) 지정해서 submit() 을 호출하면
+            해당 속성값으로 요청이 이루어집니다. 자세한 것은 구글링 ㄱㄱ
+         */
+         
+         theForm.attr("action", "/guestbook/modify")
+               .attr("method", "post")
+               .submit();
+         
+         
+      });
+      
+      
+      //del 버튼을 누르면, post 방식으로 remove로 요청을 보내도록 jquery를 작성
+ 
+
+      $(".removeBtn").click(function(){
+ 
+            theForm.attr("action", "/guestbook/remove")
+            .attr("method", "post")
+            .submit();
+      
+         });
+      
+      
+      </script>
+      
+      
+      
+      
+                     
+   </th:block>
+
+</th:block>
